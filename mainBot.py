@@ -10,29 +10,35 @@ weekdays = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 's
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(
-        chat_id = 609524364,
-        text = 'Check your schedule! \nUse one of the following commands: \n/today \n/tomorrow \n/"anyweekday" (e.g. /friday)'
+    chat_id = update.effective_chat.id,
+    text = 'Check your schedule! \nUse one of the following commands: \n/today \n/tomorrow \n/{anyweekday} (e.g. /friday)'
     )
 
 async def todayBot(update: Update, context: ContextTypes.DEFAULT_TYPE):
     info = today()
-    message = '\n'.join(info)
-    await context.bot.send_message(
-        chat_id = 609524364,
-        text = message
+    if info == 'sunday':    
+        await context.bot.send_message(
+        chat_id = update.effective_chat.id,
+        text = 'Do you want to study on SUNDAY??'
     )
+    else:
+        message = '\n'.join(info)
+        await context.bot.send_message(
+        chat_id = update.effective_chat.id,
+        text = message
+        )
 
 async def anydayBot(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.message.text == '/sunday':
         await context.bot.send_message(
-            chat_id = 609524364,
-            text = 'Do you want to study on SUNDAY??'
+        chat_id = update.effective_chat.id,
+        text = 'Do you want to study on SUNDAY??'
         )
     else:
         info = anyday(update.message.text)
         message = '\n'.join(info)
         await context.bot.send_message(
-            chat_id = 609524364,
+            chat_id = update.effective_chat.id,
             text = message
         )
 
@@ -40,14 +46,14 @@ async def tomorrowBot(update: Update, context: ContextTypes.DEFAULT_TYPE):
     info = tomorrow()
     if info == 'sunday':
         await context.bot.send_message(
-            chat_id = 609524364,
-            text = 'Do you want to study on SUNDAY??'
+        chat_id = update.effective_chat.id,
+        text = 'Do you want to study on SUNDAY??'
         )
     else:
         message = '\n'.join(info)
         await context.bot.send_message(
-            chat_id = 609524364,
-            text = message
+        chat_id = update.effective_chat.id,
+        text = message
         )
 
 

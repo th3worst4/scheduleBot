@@ -7,12 +7,14 @@ ws = wb.active
 
 def today():
     x = int(datetime.datetime.now().strftime('%w')) + 1
-    info = list()
-
-    for row in range(2,15):
-        content = ws[get_column_letter(x) + f'{row}'].value
-        info.append(str(ws['A'+f'{row}'].value) + ": " + str(content))
-    return info
+    if x == 1:
+        return "sunday"
+    else:
+        info = list()
+        for row in range(2,15):
+            content = ws[get_column_letter(x) + f'{row}'].value
+            info.append(str(ws['A'+f'{row}'].value) + ": " + str(content))
+        return info
 
 def anyday(command):
     info = list()
