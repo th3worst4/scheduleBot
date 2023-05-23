@@ -1,7 +1,8 @@
 from telegram import Update
-from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler
+from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler, ConversationHandler, MessageHandler, filters
 from excelFunctions import today, anyday, tomorrow
 from getBotData import readData
+import sys
 
 botTolkien = readData()
 
@@ -56,6 +57,27 @@ async def tomorrowBot(update: Update, context: ContextTypes.DEFAULT_TYPE):
         text = message
         )
 
+async def turnPcServer(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def answer(update: Update, context: ContextTypes.DEFAULT_TYPE):
+        if update.message.text == "Y":
+            sys.exit("Terminal was closed")
+        elif update.message.text == "N":
+            await context.bot.send_message(
+            chat_id = update.effective_chat.id,
+            text = "Right them..."
+            )
+        else:
+            await context.bot.send_message(
+            chat_id = update.effective_chat.id,
+            text = "I didn't understand, so I will do nothing."
+            )
+
+    await update.message.reply_text(
+        'Are you sure you want to turn off the server?(Y/N)',
+    )
+    turn_off_answer = MessageHandler(filters.TEXT , answer)
+    application.add_handler(turn_off_answer)
+
 
 start_handler = CommandHandler('start', start)
 application.add_handler(start_handler)
@@ -68,6 +90,11 @@ application.add_handler(anyday_handler)
 
 tomorrow_handler = CommandHandler('tomorrow', tomorrowBot)
 application.add_handler(tomorrow_handler)
+
+turn_offpc_handler = CommandHandler("pcoff", turnPcServer)
+application.add_handler(turn_offpc_handler)
+
+
 
 
 application.run_polling()
